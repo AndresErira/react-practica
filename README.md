@@ -72,7 +72,7 @@ Instalamos loaders y pligins
  ```js
     const path = require("path");
     const HtmlWebpackPlugin = require('htmlwebpackplugin');
-    modules.exports={
+    module.exports={
         entry: './src/index.js',
         output: {
             path: path.resolve(__dirname, 'dist'),
@@ -121,4 +121,22 @@ Instalamos loaders y pligins
 * por ultimo se agregan los plugins pero para agregarlos hay que importarlos con el nombre del paquete que instalamos. html-webpack-plugin. Le agregamos la configuracion como objeto tendra template donde esta nuestro archivo html y filename contiene el archivo de salida
 
 
+## CAMBIOS EN TIEMPO REAL CON WEBPACK
+
+* Creamos nuevos scripts en package.json
+
+    ```js
+    "start":"webpack serve --open",
+    "build": "webpack --mode production"
+    ```
+* start nos crea un servidor local para ejecutar nuestro proyecto con webpack
+* build nos crea el archivo de produccion para poder subirlo a la nube
+
+Para poder que react renderice componentes en el archivo index.html del directorio public debemos asignar un div con el id que hace render del componente en index.js
+
+
+* Para evitar una advertencia de webpack agregamos el modo desarrollo en webpack.config.js
+```js
+    mode: 'development'
+```
 
