@@ -140,3 +140,64 @@ Para poder que react renderice componentes en el archivo index.html del director
     mode: 'development'
 ```
 
+## Css y Sass
+
+Para agregar estilos a react podemos usar el preprocesador sass.
+<br> Se instalan las siguientes dependencias que nos permitiran trabajar con estilos y el preprocesador sass
+```js
+npm install mini-css-extract-plugin css-loader style-loader sass -D
+```
+ 
+ Se añade el plugin a webpack.config.js
+
+ ```js
+ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+ ```
+* se configuran los loaders instalados
+
+```js
+{
+    test:/\.s[ac]ss$/i,
+    use:[        
+            "style-loader",
+            "css-loader",
+            "sass-loader",
+        ]
+}
+```
+* Se agrega el plugin
+```js
+plugins:[
+  /*  new HtmlWebpackPlugin({
+        template: './public/index.html',
+        filename: './index.html'
+    }),*/
+
+    new MiniCssExctractplugin({
+        filename: '[name].css'
+    }),
+],
+devServer:{
+            static:path.join(__dirname,'dist'),
+            compress: true,
+            port: 3005,
+        }
+```
+
+* La linea devSever nos permite ubicar el proyecto para trabajar en el modo de desarrollo y cambiar el puerto.
+
+* Dentro de src se crea el directorio styles y dentro global.scss, dentro de global se crea la configuracion para probar el archivo
+
+```scss
+$base-color: #ff0000;
+$color: rgba(black, 0.88);
+body{
+    background-color: $base-color;
+    color: $color;
+}
+````
+
+* Seguimos con App.jsx e importamos el archivo de estilo
+```jsx
+import '../styles/global.scss';
+```
