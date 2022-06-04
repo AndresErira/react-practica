@@ -201,3 +201,71 @@ body{
 ```jsx
 import '../styles/global.scss';
 ```
+
+# TRANSFORMANDO HTML EN COMPONENTES
+Se debe analizar como esta construido el proyecto para poder hacer la conversion a componentes.
+
+EJEMPLO:
+creamos dentro de src el directorio containers y dentro login.jsx
+
+*Login.html
+
+```html
+<div class="login">
+        <div class="form-container">
+            <img src="./assets/logos/logo_yard_sale.svg" alt="logo" class="logo">
+
+            <h1 class="title">Create a new password</h1>
+            <p class="subtitle">Enter a new password for you account</p>
+
+            <form action="/" class="form">
+                <label for="password">Password</label>
+                <input type="password" id="password"
+                 placeholder="*********"
+                  class="input input-password">
+                <label for="new-password">Password</label>
+                  <input type="password" id="new-password"
+                   placeholder="*********"
+                    class="input input-password">
+                <input type="submit"
+                 value="Confirm"
+                  class="primary-button logi-button">
+            </form>
+        </div>
+    </div>
+```
+* Se debe tener en cuenta que class es una palabra reservada de javascript y por lo tanto para dar estilos a los componentes se usa className (con camelcase), y todas las etiquetas deben tener un cierre (/>) como las imagenes o los inputs.
+* Login.jsx
+
+```jsx
+import React from 'react';
+
+const Login=()=>{
+    return(
+        <div className="login">
+        <div className="form-container">
+            <img src="./assets/logos/logo_yard_sale.svg" alt="logo" className="logo" />
+
+            <h1 className="title">Create a new password</h1>
+            <p className="subtitle">Enter a new password for you account</p>
+
+            <form action="/" className="form">
+                <label for="password">Password</label>
+                <input type="password" id="password"
+                 placeholder="*********"
+                  className="input input-password"/>
+                <label for="new-password">Password</label>
+                  <input type="password" id="new-password"
+                   placeholder="*********"
+                    className="input input-password"/>
+                <input type="submit"
+                 value="Confirm"
+                  className="primary-button logi-button"/>
+            </form>
+        </div>
+    </div>
+    );
+}
+
+export {Login};
+```
