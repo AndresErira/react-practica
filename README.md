@@ -269,3 +269,72 @@ const Login=()=>{
 
 export {Login};
 ```
+
+## Estilos en los componentes
+
+Para agregar estilos en los componentes creamos el archivo scss con las variables que vamos a estar usando a lo largo del proyecto.
+
+* _vars.scss
+```scss
+:root{
+    --white:#FFFFFF;
+    --black:#000000;
+    --very-light-pink:#C7C7C7;
+    --text-input-field:#F7F7F7;
+    --hospital-green:#ACD9B2;
+    --sm: 14px;
+    --md: 16px;
+    --lg: 18px;
+}
+```
+* Tambien el respectivo estilo para el componente login, se agregarian los estilos sin el body ni las variables.
+
+* Se crea el archivo Layout.jsx
+```jsx
+import React from 'react';
+
+const Layout = ({children})=>{
+    return(
+        <div className="Layout">
+            {children}
+        </div>
+    )
+}
+export {Layout};
+```
+* La palabra children traera el componente que se declare dentro de layout cuando se llama en otro componente en este caso App.jsx.
+```jsx
+import React from 'react';
+import { Layout } from '../containers/Layout';
+import { Login } from '../containers/Login';
+import '../styles/global.css'
+
+const App = () =>{
+    return(
+        <Layout>
+            <Login/>
+        </Layout>
+    )
+}
+export {App};
+```
+* En este caso el componente Login seria children del componente Layout
+* Para evitar problemas de carga con las imagenes se importa el loader file-loader y se configura en webpack.config.js, se añade en rules con test paraque use los diferentes tipos de archivo de imagenes.
+```js
+//Gracias al comentario del compañero 
+//Arturo Juarez Sanchez en platzi
+{
+                    test: /\.(png|jp(e*)g|svg|gif)$/,
+                    use:[
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                name:'images/[hash]-[name].[ext]',
+                            }
+                        }
+                    ]
+                } 
+```
+
+# PAGINAS RUTAS Y COMPONENTES
+## 
