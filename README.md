@@ -337,4 +337,44 @@ export {App};
 ```
 
 # PAGINAS RUTAS Y COMPONENTES
-## 
+## React Router DOM
+Permite generar la navegacion entre paginas y componentes se crea el componente RecoveryPassword.jsx de la misma forma que se creo Login.
+
+* Se instala react-router-dom sin -D porque sera parte del proyecto en produccion
+
+        npm install react-router-dom
+
+Se crea el directorio /routes dentro se mueve el componente App.js que sera nuestro enrutador principal y nos dara mas orden al proyecto. Dentro se importa react-router-dom y sus herramientas.
+
+* App.jsx quedaria asi
+```jsx
+//react-router-dom actualizado a la version 6 gracias a los compañeros
+//Carlos Antonio Spin y Luis Fernando Nuñes
+import React from 'react';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import { Layout } from '../containers/Layout';
+import { Login } from '../containers/Login';
+import { RecoveryPassword } from '../containers/RecoveryPassword';
+import '../styles/global.css'
+
+const App = () =>{
+    return(
+        <BrowserRouter>
+            <Routes>
+                <Layout>
+                    <Route exact path='/' element={<Home/>} />
+                    <Route exact path='/' element={<Login/>} />
+                    <Route exact path='/' element={<RecoveryPassword/>} />
+                    <Route element={NotFound} />
+                </Layout>
+            </Routes>
+        </BrowserRouter>
+    )
+}
+export {App};
+```
+* NOTA: A partir de la version 6 se dejo de usar Swicth y fue reemplazado por Routes dentro de Route ya no se usa component en su lugar se usa element. Y dentro de las llaves {} del atributo element se usa el componente como etiqueta.
+
+## Navegando entre rutas
+
+Para probar que las rutas estan funcionando correctamente se escribe en la barra de navegacion manualmente las rutas y me deben mostrar los componentes asignados a la ruta, tambien se crean los componentes Home y NotFound para la pagina de error 404 esta es la ruta por defecto a la que no se le asigna path por lo que al escribir mal una ruta en la barra de direcciones nos mostrara este componente

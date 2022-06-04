@@ -5,7 +5,8 @@ const MiniCssExtractPlugin= require('mini-css-extract-plugin');
         entry: './src/index.js',
         output: {
             path: path.resolve(__dirname, 'dist'),
-            filename: 'bundle.js'
+            filename: 'bundle.js',
+            publicPath: '/'
         },
         mode:'development',
         resolve:{
@@ -62,5 +63,6 @@ const MiniCssExtractPlugin= require('mini-css-extract-plugin');
             static:path.join(__dirname,'dist'),
             compress: true,
             port: 3005,
+            historyApiFallback: true
         }
     }
