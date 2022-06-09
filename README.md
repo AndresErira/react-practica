@@ -377,4 +377,20 @@ export {App};
 
 ## Navegando entre rutas
 
-Para probar que las rutas estan funcionando correctamente se escribe en la barra de navegacion manualmente las rutas y me deben mostrar los componentes asignados a la ruta, tambien se crean los componentes Home y NotFound para la pagina de error 404 esta es la ruta por defecto a la que no se le asigna path por lo que al escribir mal una ruta en la barra de direcciones nos mostrara este componente
+Para probar que las rutas estan funcionando correctamente se escribe en la barra de navegacion manualmente las rutas y me deben mostrar los componentes asignados a la ruta, tambien se crean los componentes Home y NotFound para la pagina de error 404 esta es la ruta por defecto a la que no se le asigna path por lo que al escribir mal una ruta en la barra de direcciones nos mostrara este componente.
+
+## Header En todas las rutas
+
+* Se crea el componente Header.jsx y se crea su estructura
+```jsx
+import React from 'react';
+import { Header } from '../components/Header';
+
+const Home = () =>{
+    return(
+        <Header />
+    );
+}
+export {Home};
+```
+* Tambien se crea su respectivo archivo scss para los estilos.
