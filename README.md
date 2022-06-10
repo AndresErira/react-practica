@@ -394,3 +394,17 @@ const Home = () =>{
 export {Home};
 ```
 * Tambien se crea su respectivo archivo scss para los estilos.
+
+# ATOMIC DESIGN
+
+Es la forma en como puede estar dividida la aplicacion Atomos, Moleculas, Organizmos, plantillas y paginas.
+
+* ATOMOS: Representan pequeños elementos o unidades clave del proyecto. (Botones, elementos de texto o imagenes).
+
+* MOLECULAS: Permiten unir uno o mas componentes.
+
+* ORGANISMOS: Es la forma de combinar varios componentes (logos y menus dentro de un header).
+
+* PLANTILLAS (templates): Representacion de los organismos su comportamiento y su ciclo de vida.
+
+* PAGINAS (PAGES): Es la pagina de una aplicacion ya funcionando
