@@ -408,3 +408,41 @@ Es la forma en como puede estar dividida la aplicacion Atomos, Moleculas, Organi
 * PLANTILLAS (templates): Representacion de los organismos su comportamiento y su ciclo de vida.
 
 * PAGINAS (PAGES): Es la pagina de una aplicacion ya funcionando
+
+# CREANDO COMPONENTES Y RUTAS
+
+Se crean las rutas principales de nuestra aplicacion.
+* App.jsx
+```jsx
+import React from 'react';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import { Layout } from '../containers/Layout';
+import { Login } from '../containers/Login';
+import { RecoveryPassword } from '../containers/RecoveryPassword';
+import {Home} from '../pages/Home';
+import { NotFound } from '../pages/NotFound';
+import '../styles/global.css'
+
+const App = () =>{
+    return(
+        <BrowserRouter>
+            <Layout>
+                <Routes>
+                    <Route exact path='/' element={<Home/>} />
+                    <Route exact path='/login' element={<Login/>} />
+                    <Route exact path='/recovery-password' element={<RecoveryPassword/>} />
+                    <Route exact path='/send-email' element={<SendEmail/>} />
+                    <Route exact path='/new-password' element={<NewPassword/>} />
+                    <Route exact path='/account' element={<Account/>} />
+                    <Route exact path='/signup' element={<CreateAccount/>} />
+                    <Route exact path='/checkout' element={<Checkout/>} />
+                    <Route exact path='/orders' element={<Orders/>} />
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </Layout>
+        </BrowserRouter>
+    )
+}
+export {App};
+
+```
