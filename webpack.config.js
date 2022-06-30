@@ -11,6 +11,14 @@ const MiniCssExtractPlugin= require('mini-css-extract-plugin');
         mode:'development',
         resolve:{
             extensions:['.js','.jsx'],
+            alias:{
+                '@components': path.resolve(__dirname, 'src/components/'),
+                '@containers': path.resolve(__dirname, 'src/containers/'),
+                '@pages': path.resolve(__dirname, 'src/pages/'),
+                '@logos': path.resolve(__dirname, 'src/assets/logos/'),
+                '@icons': path.resolve(__dirname, 'src/assets/icons/'),
+                '@styles': path.resolve(__dirname, 'src/styles/'),
+             }
         },
         module:{
             rules:[
@@ -38,15 +46,10 @@ const MiniCssExtractPlugin= require('mini-css-extract-plugin');
                         
                     ]
                 },{
-                    test: /\.(png|jp(e*)g|svg|gif)$/,
-                    use:[
-                        {
-                            loader: 'file-loader',
-                            options: {
-                                name:'images/[hash]-[name].[ext]',
-                            }
-                        }
-                    ]
+                    
+                        test: /\.(png|svg|jp(e*)g|gif)$/,
+                        type: 'asset'
+                      
                 } 
             ]
         },

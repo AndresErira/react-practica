@@ -446,3 +446,152 @@ const App = () =>{
 export {App};
 
 ```
+
+# TIPOS DE COMPONENTES 
+## Componentes stateful
+Nos permiten trabajar con un estado a traves de los hooks de estado y que lleva logica entre su declaracion y su return.
+*  EJ:
+```jsx
+import React, {useState} from 'react';
+
+const Button = ()=>{
+    const [name, setName] = useState('Hola');
+    return(
+        <div>
+            <h1>{name} Mundo</h1>
+        </div>
+    );
+}
+```
+## Componentes stateless
+Estos componentes solo renderizan informacion o vistas y la mejor forma de estrucurarlos es sin el return o usando directamente el componente que va a renderizar con parentesis.
+
+Ejemplo 1:
+```jsx
+import React from 'react';
+
+const Button = ()=>(
+    <div>
+        <h1>hola mundo</h1>
+    </div>
+)
+```
+Ejemplo 2:
+```jsx
+import React from 'react';
+
+const Button = ({text})=><ButtonRed text={text} />
+```
+
+## Otros Componentes
+Otros componentes que ya son muy usados pero que nos podemos encontrar en proyectos son:
+
+## Componentes de Clase
+Usaban un constructos para declarar el estado y fueron reemplazados por los hooks
+```jsx
+import React, { Component } from 'react';
+
+class App extends Component {
+    constructor(){
+        this.state = {
+            count: 0
+        };
+    }
+    render(){
+        return(
+            <div>
+                <h1>Hello world</h1>
+            </div>
+        )
+    }
+}
+ ```
+ ## Componentes de orden Superior o HOC (High Order Components)
+ Reciben un componente, extienden su funcionalidad y retornan un componente compuesto.
+
+ ```jsx
+import React, { Component } from 'react';
+
+function ComponentWrapper(WrapperComponent) {
+    class Wrapper extends Component{
+        render(){
+            return <WrapperComponent {...this.props} />
+        }
+    }
+    return Wrapper;
+}
+ ```
+
+ ## IMAGENES Y ALIAS EN WEBPACK
+ Para mejor estructura del proyecto se mueven los directorios logos e iconos a /src dentro de un nuveo directorio llamado assets y se configura webpack de la siguiente forma.
+
+ * A partir de la version 5 de webpack ya no es necesario instalar ningun loader para la manipulacion de imagenes.
+
+ * Se agrega un nuevo test en webpack.config.js
+ ```js
+ {
+   test: /\.(png|svg|jp(e*)g|gif)$/,
+   type: 'asset'
+ }
+ 
+ ```
+
+ ## ALIAS
+ Nos permite acceder de una forma mas amigable a diferentes archivos en diferentes directorios y evitar el uso de rutas demasiado largas.
+
+ Dentro del resolve de webpack.config.js agregamos un nuevo objeto con el nombre de alias.
+ ```js
+ alias:{
+    '@components': path.resolve(__dirname, 'src/components/'),
+    '@containers': path.resolve(__dirname, 'src/containers/'),
+    '@pages': path.resolve(__dirname, 'src/pages/'),
+    '@logos': path.resolve(__dirname, 'src/assets/logos/'),
+    '@icons': path.resolve(__dirname, 'src/assets/icons/'),
+    '@styles': path.resolve(__dirname, 'src/styles/'),
+ }
+ ```
+
+ Con estos alias podemos llamar archivos desde una variable y asignarlo con {} a un componente.
+ 
+ * Ejemplo:
+ ```jsx
+ const logo = '@logos/main_logo.svg';
+
+ <img src={logo} alt="menu" />
+ ```
+ La mejor practica es traer las imagenes con import para lo anterior es mejor usarlo para cdn o archivos que se usen con url de terceros.
+
+ ```jsx
+import logo from '@logos/main_logo.svg';
+
+ <img src={logo} alt="menu" />
+ ```
+
+ # HOOKS
+Los hooks permiten manejar el comportamiento de los componentes como el estado y ya vienen integrados con react. Se reconoce porque al usarlos empiezan con la palabra use ej:(useState).
+
+```jsx
+import React, {useState} from 'react';
+
+const componente = ()=>{
+    //el valor inicial es opcional o podria se cualquier valor 
+    //primitivo, arreglo u objeto
+    const [estado, setEstado] = useState("Valor inicial");
+
+    //Se crea una funcion que cambie el estado
+    const handleState = ()=>{
+        setEstado("Valor cambiado");
+    }
+    return(
+        <>
+            {//Se asigna la funcion que maneja el estado al onclick
+            }
+            <h1 onClick={handleState}>Titulo</h1>
+            <p>{estado}</p>
+        </>
+        
+    );
+}
+export {component};
+
+```
