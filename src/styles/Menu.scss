@@ -6,6 +6,9 @@
 	border: 1px solid var(--very-light-pink);
 	border-radius: 6px;
 	padding: 20px 20px 0 20px;
+	position: absolute;
+	top:60px;
+	right: 50px;
 }
 .Menu ul {
 	list-style: none;
@@ -22,6 +25,7 @@
 .Menu ul li:last-child {
 	padding-top: 20px;
 	border-top: 1px solid var(--very-light-pink);
+	padding-bottom: 15px;
 }
 .Menu ul li:last-child a {
 	color: var(--hospital-green);

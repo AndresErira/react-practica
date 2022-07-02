@@ -577,6 +577,7 @@ const componente = ()=>{
     //el valor inicial es opcional o podria se cualquier valor 
     //primitivo, arreglo u objeto
     const [estado, setEstado] = useState("Valor inicial");
+    //El primer valor es el estado y el segundo la funcion que modifica el estado
 
     //Se crea una funcion que cambie el estado
     const handleState = ()=>{
@@ -594,4 +595,178 @@ const componente = ()=>{
 }
 export {component};
 
+``` 
+## useEffect y consumo de APIs
+Permite añadir informacion a nuestro componente y re-renderizar o cambiar su contenido cuando una funcion se haya completado.
+
+* Para usar useEfect lo importamos desde react al igual que useState y para usarlo se crea como el llamado a una funcion con dos parametros de los cuales el primer es la funcion anonima que podria cargar los archivos de una api y el segundo sera un arreglo en el que agregamos los diferentes valores que va a escuchar sobre un cambio que se desencadene por la accion de un usuario.
+* Para trabajar con los recursos de una API instalamos axios.
+
+        npm install axios
+
+* Ejemplo
+```jsx
+import React, { useEffect, useState} from 'react';
+import OtroComponente from './ruta/otroComponente';
+import axios from 'axios';
+
+const API='http://urldeapi';
+
+const miComponente =()=>{
+    const [state, setState] = useState();
+
+//Se usa async ya que una peticion se puede demorar
+    useEffect(async()=>{
+        const response = await axios(API);
+        setState(response.data);
+    }, [])
+    return(
+        //Se puede iterar un componte para que muestre 
+        <>
+        {state.map(dato=>(
+            <OtroComponente atrib={dato}/>
+        ))}
+        </>
+        
+    );
+}
+export {miComponente};
+
+```
+* El anterios uso del hook nos puede llegar a generar un warning ya que useEffect no debe retornar nada mas que una funcion. Se debe crear una funcion adentro y llamarla inmediatamente.
+//se puede iterar cada dato y pasarlo como atributo a otro componente. La forma correcta del ejemplo del proyecto sería:
+
+```jsx
+import React, { useEffect, useState } from 'react';
+import {ProductItem} from '../components/ProductItem';
+import '../styles/ProductList.scss';
+import axios from 'axios';
+
+const API = 'https://api.escuelajs.co/api/v1/products';
+
+const ProductList = ()=>{
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {//ya no seria asincrona
+        async function getData() {//se crea nueva funcion asincrona
+          const response = await axios(API);
+          setProducts(response.data);
+        }
+        getData();//se llama inmediatamente
+    }, []);
+    
+    
+    return(
+        <section className="main-container">
+            <div className="ProductList">
+                {products.map(product=>(
+                    <ProductItem par={product} key={product.id} />
+                ))}
+            </div>
+        </section>
+    )
+}
+
+export {ProductList};
+```
+
+
+* En ocaciones async y await puede requerir un plugin para que babel logre interpretarlo correctamente. Siendo el caso se instala.
+
+
+            npm install @babel/plugin-transform-runtime
+
+despues de instalado se agrega la configuracion para .babelrc
+```json
+"plugins":[
+    "@babel/plugin-transform-runtime"
+]
+```
+
+# CUSTOM HOOKS
+Es la forma que separamos los hooks en una logica y poder reutilizarlos en otros componentes.
+
+Se crea un directorio dentro de src llamado hooks y el nombre de cada archivo como buena practica deberia empezar con la palabra use y sera de extension .js ya que solo tendra logica.
+
+```js
+    import React, {useState, useEffect} from 'react';
+    import axios from 'axios';
+
+    const useGetProducts = (API)=>{
+        const [products, setProducts] = useState([]);
+
+        useEffect(()=>{
+            async function getProducts(){
+                const response = await axios(API);
+                setProducts(response.data);
+            }
+            getProducts();
+        }, [])
+
+        return products;
+
+    }
+    export {useGetProducts};
+
+```
+
+* En el componente eliminamos la linea de codigo que acabamos de personalizar importamos el custom hook.
+```jsx
+import React from 'react';
+import {ProductItem} from '../components/ProductItem';
+import { useGetProducts } from '@hooks/useGetProducts';
+import '@styles/ProductList.scss';
+
+const API = 'https://api.escuelajs.co/api/v1/products';
+
+const ProductList = ()=>{
+
+    //Aqui se almacena toda la data
+       const products = useGetProducts(API);
+    //se pone la API como argumento
+    return(
+        <section className="main-container">
+            <div className="ProductList">
+                {products.map(product=>(
+                    <ProductItem product={product} key={product.id} />
+                //iteramos toda la data para renderizar el componente pasandole cada dato como atributo    
+                //le pasamos una key la cual debe ser unica
+                    
+                ))}
+            </div>
+        </section>
+    )
+}
+
+export {ProductList};
+
+```
+
+* El componente que recibe cada iteracion
+```jsx
+import React, {useState} from 'react';
+import '@styles/ProductItem.scss';
+import btncart from '@icons/bt_add_to_cart.svg';
+
+const ProductItem = ({product})=>{
+
+/* Para el uso correcto de la API se debe leer la documentacion de 
+la misma ya que los datos que obtenemos debemos llamarlos de 
+forma correcta y asi se muestren en el componente*/
+    return(
+        <div className='ProductItem'>
+            <img src={product.images[0]} alt={product.title} />
+            <div className="product-info">
+                <div>
+                    <p>$120,00</p>
+                    <p>{product.title}</p>
+                </div>
+                <figure>
+                    <img src={btncart} alt="button cart" />
+                </figure>
+            </div>
+        </div>
+    )
+}
+export {ProductItem};
 ```

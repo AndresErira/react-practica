@@ -18,6 +18,7 @@ const MiniCssExtractPlugin= require('mini-css-extract-plugin');
                 '@logos': path.resolve(__dirname, 'src/assets/logos/'),
                 '@icons': path.resolve(__dirname, 'src/assets/icons/'),
                 '@styles': path.resolve(__dirname, 'src/styles/'),
+                '@hooks': path.resolve(__dirname, 'src/hooks/'),
              }
         },
         module:{
