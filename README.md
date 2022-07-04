@@ -770,3 +770,47 @@ forma correcta y asi se muestren en el componente*/
 }
 export {ProductItem};
 ```
+# useRef y formularios
+El hook useRef nos permite referenciar un formulario para poder obtener sus datos y manipularlos para su validacion antes de enviarlo al backend
+EJ:
+```jsx
+import React, {useRef} from 'react';
+
+const componenteLogin = ()=>{
+    
+    //se crea la referencia con el hook inicializandolo en valor null
+    const form = useRef(null);
+
+    //Se crea la funcion que manejara el click del formulario
+    const handleSubmit = (e)=>{
+        //preventDefault evita que se recargue la pagina
+        //cuando se presiona el boton submit
+        e.preventDefault();
+
+        //FormData es nativo de javascript y creamos la instancia a 
+        //traves de la const form
+        const formData = new FormData(form.current);
+
+        //se crea el objeto data
+        const data = {
+            email : formData.get("email");
+            password : formData.get("password");
+        }
+        /*
+        a traves del metodo get de FormData accedemos a cada uno de los campos del formulario al que hicimos referencia, los inputs deben tener el atributo name para poder obtener la referencia en el objeto data
+        */
+       console.log(data);//verificamos la captura de los datos
+
+    }
+    return(
+        <div className="Login">
+            <form ref={form}>
+                <input type="text" name="email" placeholder="email" />
+                <input type="password" name="password" placeholder="password" />
+            </form>
+            <button type="submit" onClick={handleSubmit}>Log in</button>
+        </div>
+    );
+}
+export {componenteLogin};
+```
