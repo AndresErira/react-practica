@@ -814,3 +814,189 @@ const componenteLogin = ()=>{
 }
 export {componenteLogin};
 ```
+
+# React Context
+Nos permite conectar toda la aplicación atraves de un contexto sin importar el nivel en el que se encuentre un componente, se podra acceder sin ningun problema.
+
+Se crea un directorio context y el archivo AppContext.js
+/src/context/AppContext.js
+```js
+import React from 'react';
+
+//Se crea el context con objeto vacio
+const AppContext = React.createContext({});
+
+export {AppContext}
+```
+
+* Lo importamos dentro del componente principal App.js
+* Usamos la etiqueta AppContext.Provider con un value con objeto vacio y debe encapsular todos los componentes o rutas que maneje este componente.
+
+Ejemplo:
+```jsx
+import React from 'react';
+import {AppContext} from '@context/AppContext';
+
+const App = () =>{
+   return(
+    <AppContext.Provider value={}>
+       <BrowserRouter>
+            <Layout>
+                <Routes>
+                    <Route exact path='/' element={<Home/>} />
+                    <Route exact path='/login' element={<Login/>} />
+                    <Route exact path='/recovery-password' element={<RecoveryPassword/>} />
+                    <Route exact path='/send-email' element={<SendEmail/>} />
+                    <Route exact path='/new-password' element={<NewPassword/>} />
+                    <Route exact path='/account' element={<MyAccount/>} />
+                    <Route exact path='/signup' element={<CreateAccount/>} />
+                    <Route exact path='/checkout' element={<Checkout/>} />
+                    <Route exact path='/orders' element={<Orders/>} />
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </Layout>
+        </BrowserRouter>
+    </AppContext.Provider>
+   ); 
+}
+```
+
+* Creamos un custom hook para manejar el estado y funciones clave para el aplicativo.
+* /src/hooks/useInitialState.js
+```js
+import {useState} from 'react';
+
+//nos permitira trabajar con el carrito
+const initialState = {
+    cart: [],
+}
+
+const useInitialState = () =>{
+    const [state, setState] = useState(initialState);
+
+    const addToCart = (payload)=>{
+        setState({
+            ...state,
+            cart: [...state.cart, payload]
+        })
+    }
+    //Retornamos el estado y la funcion addToCart
+    return {
+        state,
+        addToCart
+    }
+}
+```
+* En App.js importamos el custom hook
+
+```jsx
+import {useInitialState} from '@hooks/useInitialState';
+
+const App = ()=>{
+    const initialState = useInitialState();
+
+    //Le compartimos el state para que sea accesible por toda la app
+    <AppContext.Provider value={initialState}>
+}
+```
+
+* Para conectarlo usaremos el componente ProductItem
+* Tenemos que importar AppContext para poder hacer la conexion.
+
+```jsx
+import React, {useState} from 'react';
+import '@styles/ProductItem.scss';
+import btncart from '@icons/bt_add_to_cart.svg';
+import AppContext from '@context/AppContext';
+
+const ProductItem = ({product})=>{
+
+    //Agregamos el context
+    const { addToCart } = useContext(AppContext);
+
+    const handleClick= item =>{
+        //addToCart viene del custom Hook useInitialState
+        addToCart(item)
+    }
+
+    return(
+        <div className='ProductItem'>
+            <img src={product.images[0]} alt={product.title} />
+            <div className="product-info">
+                <div>
+                    <p>${product.price}</p>
+                    <p>{product.title}</p>
+                </div>
+                {
+                    //funcion anonima ejecuta handleClick que envía 
+                    //product como argumento a traves de onClick
+                }
+                <figure onClick={ ()=> handleClick(product)} >
+                    <img src={btncart} alt="button cart" />
+                </figure>
+            </div>
+        </div>
+    )
+}
+export {ProductItem};
+```
+
++ Para completar la conexion en el header conectamos el estado
+
+```jsx
+import React, { useState, useContext } from 'react';
+import '@styles/Header.scss';
+import { Menu } from '@components/Menu';
+import IconMenu from '@icons/icon_menu.svg';
+import Logo from '@logos/logo_yard_sale.svg';
+import IconCart from '@icons/icon_shopping_cart.svg';
+//importamos el context para poder acceder a cart
+import { AppContext } from '../context/AppContext';
+
+const  Header = () =>{
+  const [toggle, setToggle] = useState(false);
+
+
+//destructuramos cart ya que en este ejemplo 
+//no necesitaremos todo el state
+//se usaria asi const { state } = useContext(AppContext);
+  const { state : {cart}} = useContext(AppContext);
+
+  const handleToggle = ()=>{
+    setToggle(!toggle);
+  }
+
+    return (
+      <nav>
+        <img src={IconMenu} className="menu" alt="menu" />
+        <img src={Logo} alt="logo"  className="logo"
+        />
+        <div className="navbar-left">
+          <ul>
+            <li>
+            
+            </li>
+          </ul>
+        </div>
+        <div className="navbar-right">
+          <ul>
+            <li className="navbar-email"
+            onClick={handleToggle}>
+              platzi@example.com
+               </li>
+            <li className="navbar-shopping-cart">
+              <img src={IconCart} />
+              {
+                //validamos la longitud del cart para mostrar el div
+                //si no se cumple el resultado sera nulo
+              }
+              {cart.length > 0 ? <div>{cart.length}</div> : null }
+            </li>
+          </ul>
+        </div>
+        {toggle && <Menu />}
+      </nav>
+    );
+}
+export {Header}
+```
