@@ -1000,3 +1000,131 @@ const  Header = () =>{
 }
 export {Header}
 ```
+# Orden de compra del proyecto (practica)
+
+## Manejo del toggle
+En el componente Header creamos un nuevo estado ```[ toggleOrders, setToggleOrders ]``` que se inicialice en ``` false ``` importamos el componente MyOrder se llama despues del anterior toggle creado 
+```jsx
+{toggleOrders && <MyOrder />}
+```
+* Para mostrarlos usamos todo el icono del carrito de compras agregamos el evento onClick y directamente modificamos el valor con setToggleOrders y el simbolo ! que negaria el valor actual del toggleOrders.
+* NOTA: dentro de onClick no se debe ejecutar una funcion directamente sino que se debe encerrar dentro de una funcion anonima para evitar que se desencadene autmaticamente.
+
+* En el componente MyOrder importamos useContext y lo usamos igual que en los componentes anteriores.
+```jsx
+
+import React, { useContext } from 'react';
+import arrow from '@icons/flechita.svg'
+import {OrderItem} from '../components/OrderItem';
+import '@styles/MyOrder.scss';
+
+const MyOrder = ()=>{
+    const { state } = useContext(AppContext);
+    return(
+        <aside className="MyOrder">
+            <div className="title-container">
+                <img src={arrow} alt="arrow" />
+                <p className="title">My order</p>
+            </div>
+            <div className="my-order-content">
+            {
+            //state.cart es donde se almacenan todos los recursos en este ejemplo
+            //Los iteramos con map
+            }
+                {state.cart.map(product=>(
+                    <OrderItem product={ product } key={`orderItem-${product.id}`}/>
+                ))}
+                <div className="order">
+                    <p>
+                        <span>Total</span>
+                    </p>
+                    <p>$560.00</p>
+                </div>
+                <button className="primary-button">
+                    Checkout
+                </button>
+            </div>
+        </aside>
+    );
+}
+export {MyOrder};
+```
+
+* NOTA: Al usar el key en el componente para evitar que se repitan key en otros rendrizados se usan template literals (`) para personalizar cada key.
+ - Tambien al usar la funcion anonima dentro de map usamos parentesis para evitar el uso de return del componente, en caso de usar {} se debe poner la palabra return antes del componente.
+
+ ## Calculando el precio total
+
+ Primero se debe renderizar cada producto en orderItem que renderizara cada elemento pasado por props haciendo uso de las propiedades que provee la API.
+ ```jsx
+ import React from 'react';
+import '@styles/OrderItem.scss';
+import close from '@icons/icon_close.png';
+
+const OrderItem = ({ product })=>{
+    return(
+        <div className="OrderItem">
+            <figure>
+                <img src={product.images[0]} alt="Bike"/>
+            </figure>
+            <p>{product.title}</p>
+            <p>${product.price}</p>
+            <img src={close} alt="close"/>
+        </div>
+    );
+}
+export {OrderItem};
+ ```
+ * En MyOrder.jsx calcularemos el total de la siguiente forma:
+ * Recordando la funcion ```reduce``` de los arrays
+ ```js
+ const reducer = (acumulador, valorActual) => nuevoAcumulador
+ /*la funcion reducce tiene dos parametros:
+ ----El primero es la funcion reductora
+ ----Y el segundo es el valor inicial en el siguiente ejemplo seria 0 
+ --La funcion reductoria contiene un acumulador y un elmento que se ira 
+ asignando en cada iteracion para sumarse con el acumulador y retorna el valor final para la siguiente iteracion.
+ */
+ const array = [].reduce((acum, element) => acum + element, 0);
+
+ ```
+
+ ```jsx
+ import React, { useContext } from 'react';
+import arrow from '@icons/flechita.svg'
+import {OrderItem} from '../components/OrderItem';
+import '@styles/MyOrder.scss';
+import { AppContext } from '../context/AppContext';
+
+const MyOrder = ()=>{
+    const { state } = useContext(AppContext);
+    const sumTotal = () =>{
+        const reducer = (accumulator, currentValue)=>accumulator+currentValue.price;
+        const sum = state.cart.reduce(reducer, 0);
+        return sum;
+    }
+    return(
+        <aside className="MyOrder">
+            <div className="title-container">
+                <img src={arrow} alt="arrow" />
+                <p className="title">My order</p>
+            </div>
+            <div className="my-order-content">
+                {state.cart.map((product)=>(
+                    <OrderItem product={product} key={`orderItem-${product.id}`} />
+                ))}
+                <div className="order">
+                    <p>
+                        <span>Total</span>
+                    </p>
+                    <p>${ sumTotal() }</p>
+                </div>
+                <button className="primary-button">
+                    Checkout
+                </button>
+            </div>
+        </aside>
+    );
+}
+export {MyOrder};
+ ```
