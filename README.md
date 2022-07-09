@@ -51,7 +51,7 @@ Instalamos webpack
         
         npm install webpack webpack-cli webpack-dev-server
 
-Instalamos loaders y pligins
+Instalamos loaders y plugins
 
     npm install babel-loader html-loader html-webpack-plugin
 
@@ -1128,3 +1128,21 @@ const MyOrder = ()=>{
 }
 export {MyOrder};
  ```
+
+ ## Eliminando productos del carrito de compras
+
+*Agregamos una nueva funcion a nuestro custom hook useInitialState.
+```js
+const removeFromCart = (payload) =>{
+    setState({
+        ...state,
+        cart : state.cart.filter(items => items.id != payload.id),
+    })
+    //Se agrega esta funcion al return
+}
+```
+* Lo llamamos dentro del componente que tiene el icono de la X OrderItem
+recordar que hay que importar el context 
+```jsx
+<img src={close} alt="close" onClick={}/>
+```
